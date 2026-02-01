@@ -1,62 +1,116 @@
+-- MAIN5.lua
+
 -- Improved auto respawn logic
--- This section of the code handles player respawning in an enhanced manner
-
-function AutoRespawn(player)
-    if player.isAlive then
-        return
+function AutoRespawnLogic()
+    -- Logic for auto respawn with team switching and quick respawn
+    if playerNeedsRespawn then
+        switchTeam(player)
+        respawnPlayerQuickly(player)
     end
-
-    -- Define respawn location
-    local respawnLocation = GetRandomRespawnPoint()
-    player:respawnAt(respawnLocation)
 end
 
--- Enhanced bring function with prison player detection
-function BringPlayer(targetPlayer, sourcePlayer)
-    if IsPlayerInPrison(targetPlayer) then
-        SendFeedback(sourcePlayer, "Player is in prison and cannot be brought!")
-        return
+-- Enhanced BringPlayer function
+function BringPlayer(targetPlayer)
+    -- Detect if target player is in prison
+    if isInPrison(targetPlayer) then
+        handleCarExtraction(targetPlayer)
+    else
+        teleportToPlayer(targetPlayer)
     end
-    -- Bring logic here
 end
 
--- Enhanced void function with car removal handling
-function VoidPlayer(player)
-    if player.car then
-        player.car:remove()
-    end
-    player:beVoid()
+-- Improved VoidPlayer function
+function VoidPlayer(targetPlayer)
+    -- Void teleportation and respawn logic
+    teleportToVoid(targetPlayer)
+    respawnPlayerInSafeZone(targetPlayer)
 end
 
--- Enhanced car fling function
-function CarFling(player, targetCar)
-    if IsPlayerInPrison(player) then
-        SendFeedback(player, "You cannot fling while in prison!")
-        return
+-- Enhanced CarFlingPlayer
+function CarFlingPlayer(targetPlayer)
+    -- Detect prison players and handle car safely
+    if isInPrison(targetPlayer) then
+        handleSafeCarExtraction(targetPlayer)
+    else
+        flingPlayerWithCar(targetPlayer)
     end
-    -- Fling logic here
 end
 
--- Enhanced trap function
+-- Improved TrapPlayer function
 function TrapPlayer(targetPlayer)
-    if IsPlayerInPrison(targetPlayer) then
-        SendFeedback(targetPlayer, "You cannot be trapped while in prison!")
-        return
+    -- Continuous monitoring and trapping logic
+    monitorPlayer(targetPlayer)
+    if shouldTrapPlayer(targetPlayer) then
+        trapPlayer(targetPlayer)
     end
-    -- Trap logic here
 end
 
--- All existing combat, visual, movement, and vehicle features remain intact
-
--- Utility functions
-function IsPlayerInPrison(player)
-    return player.isInPrison
+-- Combat features
+function CombatFeatures()
+    -- Silent aim, targeting, ammo, reload, and other combat mechanics
+    setSilentAim(true)
+    manageAmmoAndReload()
+    applyWeaponMacros()
+    gunObtainer()
+    applyAntiFeatures()
 end
 
-function SendFeedback(player, message)
-    player:sendMessage(message)
+-- Visual features
+function VisualFeatures()
+    -- ESP, C4 ESP, tracer, hitmarker, hitsound, world aesthetics, lighting
+    enableESP(true)
+    enableC4ESP(true)
+    setupTracers()
+    setupHitmarker()
+    setupHitSound()
+    enhanceWorldAesthetics()
+    adjustLighting()
 end
 
-function GetRandomRespawnPoint()
-    -- Implement logic to return a random respawn point
+-- Movement features
+function MovementFeatures()
+    -- Speed, noclip, teleports, animations, touch fling, arena
+    setSpeedMultiplier(2)
+    enableNoclip(true)
+    teleportPlayerToArena(player)
+    applyTouchFling()
+    applyPlayerAnimations()
 end
+
+-- Vehicle features
+function VehicleFeatures()
+    -- Vehicle mods, fly, car jump
+    enableVehicleMods(true)
+    setVehicleFly(true)
+    enableCarJump(true)
+end
+
+-- Utility features
+function UtilityFeatures()
+    -- Bypass, item pickup, part control, player actions, loops for various functions
+    enableBypass(true)
+    handleItemPickup()
+    controlParts()
+    performPlayerActions()
+    startLoopingFunctions()
+end
+
+-- Configuration management
+function ConfigurationManagement()
+    -- Manage configurations
+    loadUserConfiguration()
+    saveUserConfiguration()
+end
+
+-- Main execution
+function main()
+    AutoRespawnLogic()
+    CombatFeatures()
+    VisualFeatures()
+    MovementFeatures()
+    VehicleFeatures()
+    UtilityFeatures()
+    ConfigurationManagement()
+end
+
+main()
